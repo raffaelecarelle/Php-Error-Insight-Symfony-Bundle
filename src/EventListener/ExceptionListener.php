@@ -58,13 +58,9 @@ final class ExceptionListener
             $response->headers->set('Content-Type', 'text/html; charset=utf-8');
 
             $event->setResponse($response);
-        } catch (\Throwable $throwable) {
+        } catch (\Throwable) {
             // If there's an error in rendering, don't interfere with Symfony's error handling
             // Log the error if possible but don't break the application
-            error_log(\sprintf(
-                'PHP Error Insight Bundle failed to render exception: %s',
-                $throwable->getMessage()
-            ));
         }
     }
 }
