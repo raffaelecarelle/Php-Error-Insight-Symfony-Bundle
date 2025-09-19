@@ -135,7 +135,7 @@ final class ExceptionListenerTest extends TestCase
 
             if ($event->hasResponse()) {
                 $response = $event->getResponse();
-                $this->assertSame(404, $response->getStatusCode());
+                $this->assertSame(404, $response->getStatusCode()); //@phpstan-ignore-line
             }
         } finally {
             unset($_SERVER['APP_ENV']);
