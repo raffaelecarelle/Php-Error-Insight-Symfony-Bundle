@@ -133,9 +133,10 @@ final class ExceptionListenerTest extends TestCase
 
             $this->listener->onKernelException($event);
 
-            if ($event->hasResponse()) {
-                $response = $event->getResponse();
-                $this->assertSame(404, $response->getStatusCode()); //@phpstan-ignore-line
+            $response = $event->getResponse();
+
+            if ($response instanceof Response) {
+                $this->assertSame(404, $response->getStatusCode());
             }
         } finally {
             unset($_SERVER['APP_ENV']);
