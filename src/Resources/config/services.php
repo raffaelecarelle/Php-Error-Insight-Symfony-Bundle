@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-use ErrorExplainer\ErrorExplainer;
-use PhpErrorInsightBundle\Command\TestErrorCommand;
+use ErrorExplainer\Internal\Renderer;
 use PhpErrorInsightBundle\EventListener\ExceptionListener;
 use PhpErrorInsightBundle\Service\ErrorInsightService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -45,12 +44,8 @@ return static function (ContainerConfigurator $container): void {
             'priority' => 255, // High priority to intercept before other listeners
         ]);
 
-    // Console Command for testing
-    $services->set(TestErrorCommand::class)
-        ->args([
-            service(ErrorInsightService::class),
-        ])
-        ->tag('console.command');
+    // Register renderer as a service
+    $services->set(Renderer::class);
 
     // Aliases for easier access
     $services->alias('php_error_insight.service', ErrorInsightService::class);

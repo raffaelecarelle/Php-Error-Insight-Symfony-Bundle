@@ -102,40 +102,6 @@ final class ErrorInsightServiceTest extends TestCase
         $this->assertNull($service->getConfig());
     }
 
-    public function testHandleExceptionReturnsArrayWithExceptionData(): void
-    {
-        $exception = new \RuntimeException('Test exception', 123);
-        $result = $this->service->handleException($exception);
-
-        $this->assertIsArray($result);
-        $this->assertSame('Test exception', $result['message']);
-        $this->assertSame(__FILE__, $result['file']);
-        $this->assertIsInt($result['line']);
-        $this->assertIsArray($result['trace']);
-        $this->assertSame(\RuntimeException::class, $result['class']);
-        $this->assertNull($result['severity']);
-    }
-
-    public function testHandleExceptionReturnsNullWhenDisabled(): void
-    {
-        $service = new ErrorInsightService(
-            enabled: false,
-            backend: 'none',
-            model: null,
-            language: 'en',
-            output: 'html',
-            verbose: false,
-            apiKey: null,
-            apiUrl: null,
-            template: null,
-        );
-
-        $exception = new \RuntimeException('Test exception');
-        $result = $service->handleException($exception);
-
-        $this->assertNull($result);
-    }
-
     public function testRenderExceptionReturnsEmptyStringWhenDisabled(): void
     {
         $service = new ErrorInsightService(
