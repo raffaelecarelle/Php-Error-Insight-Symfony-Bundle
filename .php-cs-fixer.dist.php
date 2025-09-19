@@ -12,6 +12,7 @@ $finder = Finder::create()
 ;
 
 return (new Config())
+    ->setUnsupportedPhpVersionAllowed(true)
     ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
