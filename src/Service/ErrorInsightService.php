@@ -50,6 +50,11 @@ final class ErrorInsightService
             ];
 
             $this->errorExplainer = ErrorExplainer::register($config);
+
+            // Restore the original error and exception handlers for avoid header already sent error
+            // and for the error handler to work correctly with symfony integration
+            @restore_error_handler();
+            @restore_exception_handler();
         }
 
         return $this->errorExplainer;

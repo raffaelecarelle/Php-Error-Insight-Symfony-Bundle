@@ -7,7 +7,6 @@ namespace PhpErrorInsightBundle\EventListener;
 use PhpErrorInsightBundle\Service\ErrorInsightService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 final class ExceptionListener
 {
@@ -24,17 +23,7 @@ final class ExceptionListener
             return;
         }
 
-        // Don't handle in production environment for security
-        if ('prod' === ($_SERVER['APP_ENV'] ?? 'prod')) {
-            return;
-        }
-
         $exception = $event->getThrowable();
-
-        // For CLI/console, let the original handler manage it
-        if ('cli' === \PHP_SAPI) {
-            return;
-        }
 
         try {
             $content = $this->errorInsightService->renderException($exception);
@@ -44,16 +33,9 @@ final class ExceptionListener
                 return;
             }
 
-            $statusCode = 500;
-            $headers = [];
+            $statusCode = $exception->getCode();
 
-            // If it's an HTTP exception, preserve the status code and headers
-            if ($exception instanceof HttpExceptionInterface) {
-                $statusCode = $exception->getStatusCode();
-                $headers = $exception->getHeaders();
-            }
-
-            $response = new Response($content, $statusCode, $headers);
+            $response = new Response($content, $statusCode);
             $response->headers->set('Content-Type', 'text/html; charset=utf-8');
 
             $event->setResponse($response);
