@@ -9,7 +9,6 @@ A Symfony Bundle that integrates [PHP Error Insight](https://github.com/raffaele
 - ⚡ **Seamless Integration** - Replaces Symfony's default error pages in development
 - 🛠️ **Console Commands** - Test error handling via CLI
 - 🔧 **Highly Configurable** - Support for multiple AI backends and output formats
-- 🚀 **Production Ready** - Safe fallbacks and environment-aware behavior
 
 ## Requirements
 
@@ -22,7 +21,7 @@ A Symfony Bundle that integrates [PHP Error Insight](https://github.com/raffaele
 Install the bundle via Composer:
 
 ```bash
-composer require raffaelecarelle/php-error-insight-symfony-bundle
+composer require --dev raffaelecarelle/php-error-insight-symfony-bundle
 ```
 
 If you're not using Symfony Flex, you'll need to enable the bundle manually in `config/bundles.php`:
@@ -30,7 +29,7 @@ If you're not using Symfony Flex, you'll need to enable the bundle manually in `
 ```php
 return [
     // ...
-    PhpErrorInsightBundle\PhpErrorInsightBundle::class => ['all' => true],
+    PhpErrorInsightBundle\PhpErrorInsightBundle::class => ['dev' => true, 'test' => true],,
 ];
 ```
 
@@ -178,7 +177,7 @@ class YourController
 
 ## Development Mode Only
 
-For security reasons, the bundle only processes exceptions in development environments (`APP_ENV=dev`). In production, it automatically falls back to Symfony's default error handling.
+For security reasons, the bundle only processes exceptions in development environments (`APP_ENV=dev`).
 
 ## Customization
 
@@ -229,7 +228,6 @@ services:
 
 - AI analysis adds latency to error pages
 - Consider using local AI models for faster response times
-- The bundle is automatically disabled in production for performance
 
 ## Development
 
