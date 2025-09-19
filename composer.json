@@ -75,6 +75,12 @@
             "symfony/flex": true
         }
     },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "6.4.*"
+        }
+    },
     "minimum-stability": "stable",
     "prefer-stable": true
 }

@@ -14,14 +14,13 @@ final class ExceptionListener
     public function __construct(
         private readonly ErrorInsightService $errorInsightService,
         private readonly bool $enabled,
-        private readonly bool $overrideSymfonyErrors,
     ) {
     }
 
     public function onKernelException(ExceptionEvent $event): void
     {
         // Only handle if enabled and configured to override Symfony errors
-        if (!$this->enabled || !$this->overrideSymfonyErrors) {
+        if (!$this->enabled) {
             return;
         }
 

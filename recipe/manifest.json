@@ -1,0 +1,13 @@
+{
+    "bundles": {
+        "PhpErrorInsightBundle\\PhpErrorInsightBundle": ["dev", "test"]
+    },
+    "copy-from-recipe": {
+        "config/": "%CONFIG_DIR%/"
+    },
+    "env": {
+        "#1": "###> raffaelecarelle/php-error-insight-symfony-bundle ###",
+        "PHP_ERROR_INSIGHT_API_KEY": "",
+        "#2": "###< raffaelecarelle/php-error-insight-symfony-bundle ###"
+    }
+}

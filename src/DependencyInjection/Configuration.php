@@ -60,10 +60,6 @@ final class Configuration implements ConfigurationInterface
                     ->defaultNull()
                     ->info('Path to custom HTML template')
                 ->end()
-                ->booleanNode('override_symfony_errors')
-                    ->defaultTrue()
-                    ->info('Whether to override Symfony default error pages with PHP Error Insight')
-                ->end()
             ->end();
 
         return $treeBuilder;

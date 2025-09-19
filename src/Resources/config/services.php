@@ -14,6 +14,11 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
+    // Default auto-configuration for the bundle namespace
+    $services->defaults()
+        ->autowire()
+        ->autoconfigure();
+
     // Error Insight Service - manages the ErrorExplainer instance
     $services->set(ErrorInsightService::class)
         ->args([
@@ -34,7 +39,6 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service(ErrorInsightService::class),
             param('php_error_insight.enabled'),
-            param('php_error_insight.override_symfony_errors'),
         ])
         ->tag('kernel.event_listener', [
             'event' => 'kernel.exception',

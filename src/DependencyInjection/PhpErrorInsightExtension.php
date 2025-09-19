@@ -26,7 +26,6 @@ final class PhpErrorInsightExtension extends Extension
         $container->setParameter('php_error_insight.api_key', $config['api_key']);
         $container->setParameter('php_error_insight.api_url', $config['api_url']);
         $container->setParameter('php_error_insight.template', $config['template']);
-        $container->setParameter('php_error_insight.override_symfony_errors', $config['override_symfony_errors']);
 
         // Load service definitions
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

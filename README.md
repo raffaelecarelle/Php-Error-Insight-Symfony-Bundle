@@ -24,14 +24,10 @@ Install the bundle via Composer:
 composer require --dev raffaelecarelle/php-error-insight-symfony-bundle
 ```
 
-If you're not using Symfony Flex, you'll need to enable the bundle manually in `config/bundles.php`:
-
-```php
-return [
-    // ...
-    PhpErrorInsightBundle\PhpErrorInsightBundle::class => ['dev' => true, 'test' => true],,
-];
-```
+The bundle is fully compatible with Symfony Flex and will automatically:
+- Register itself in `config/bundles.php` for dev and test environments
+- Create a default configuration file in `config/packages/php_error_insight.yaml`
+- Add environment variable placeholders to your `.env` file
 
 ## Configuration
 
@@ -45,7 +41,6 @@ php_error_insight:
     backend: 'none'  # or 'local', 'api', 'openai', 'anthropic', 'google'
     language: 'en'
     output: 'auto'   # or 'html', 'text', 'json'
-    override_symfony_errors: true
 ```
 
 ### Advanced Configuration
@@ -215,7 +210,6 @@ services:
 ### Bundle Not Working
 
 1. Ensure you're in development mode (`APP_ENV=dev`)
-2. Check that `override_symfony_errors` is set to `true`
 3. Verify the bundle is registered in `config/bundles.php`
 
 ### AI Backend Issues

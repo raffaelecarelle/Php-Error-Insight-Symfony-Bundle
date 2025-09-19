@@ -38,8 +38,7 @@ final class ExceptionListenerTest extends TestCase
 
         $this->listener = new ExceptionListener(
             $this->errorInsightService,
-            enabled: true,
-            overrideSymfonyErrors: true,
+            enabled: true
         );
 
         $this->kernel = $this->createMock(KernelInterface::class);
@@ -50,8 +49,7 @@ final class ExceptionListenerTest extends TestCase
     {
         $listener = new ExceptionListener(
             $this->errorInsightService,
-            enabled: false,
-            overrideSymfonyErrors: true,
+            enabled: false
         );
 
         $event = $this->createExceptionEvent(new \RuntimeException('Test exception'));
@@ -64,8 +62,7 @@ final class ExceptionListenerTest extends TestCase
     {
         $listener = new ExceptionListener(
             $this->errorInsightService,
-            enabled: true,
-            overrideSymfonyErrors: false,
+            enabled: true
         );
 
         $event = $this->createExceptionEvent(new \RuntimeException('Test exception'));
@@ -161,8 +158,7 @@ final class ExceptionListenerTest extends TestCase
 
         $listener = new ExceptionListener(
             $errorService,
-            enabled: true,
-            overrideSymfonyErrors: true,
+            enabled: true
         );
 
         // Set development environment
@@ -197,8 +193,7 @@ final class ExceptionListenerTest extends TestCase
 
         $listener = new ExceptionListener(
             $disabledService,
-            enabled: true,
-            overrideSymfonyErrors: true,
+            enabled: true
         );
 
         $_SERVER['APP_ENV'] = 'dev';
