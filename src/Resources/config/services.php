@@ -30,6 +30,7 @@ return static function (ContainerConfigurator $container): void {
             param('php_error_insight.api_key'),
             param('php_error_insight.api_url'),
             param('php_error_insight.template'),
+            param('php_error_insight.editor_url'),
         ])
         ->public();
 

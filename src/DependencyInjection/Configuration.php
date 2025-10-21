@@ -60,6 +60,10 @@ final class Configuration implements ConfigurationInterface
                     ->defaultNull()
                     ->info('Path to custom HTML template')
                 ->end()
+                ->scalarNode('editor_url')
+                    ->defaultNull()
+                    ->info('Editor URL template (e.g., phpstorm://open?file=%%file&line=%%line)')
+                ->end()
             ->end();
 
         return $treeBuilder;

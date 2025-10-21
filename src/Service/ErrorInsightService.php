@@ -19,9 +19,10 @@ final class ErrorInsightService
         private readonly string $language,
         private readonly string $output,
         private readonly bool $verbose,
-        private readonly ?string $apiKey,
-        private readonly ?string $apiUrl,
-        private readonly ?string $template,
+        private readonly ?string $apiKey = null,
+        private readonly ?string $apiUrl = null,
+        private readonly ?string $template = null,
+        private readonly ?string $editorUrl = null,
     ) {
     }
 
@@ -47,6 +48,7 @@ final class ErrorInsightService
                 'apiKey' => $this->apiKey,
                 'apiUrl' => $this->apiUrl,
                 'template' => $this->template,
+                'editorUrl' => $this->editorUrl,
             ];
 
             $this->errorExplainer = ErrorExplainer::register($config);
