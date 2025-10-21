@@ -31,7 +31,6 @@ return static function (ContainerConfigurator $container): void {
             param('php_error_insight.api_url'),
             param('php_error_insight.template'),
             param('php_error_insight.editor_url'),
-            param('php_error_insight.host_root'),
         ])
         ->public();
 

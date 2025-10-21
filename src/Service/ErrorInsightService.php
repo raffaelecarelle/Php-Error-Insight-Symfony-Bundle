@@ -23,7 +23,6 @@ final class ErrorInsightService
         private readonly ?string $apiUrl = null,
         private readonly ?string $template = null,
         private readonly ?string $editorUrl = null,
-        private readonly ?string $hostRoot = null,
     ) {
     }
 
@@ -50,7 +49,6 @@ final class ErrorInsightService
                 'apiUrl' => $this->apiUrl,
                 'template' => $this->template,
                 'editorUrl' => $this->editorUrl,
-                'hostProjectRoot' => $this->hostRoot,
             ];
 
             $this->errorExplainer = ErrorExplainer::register($config);
