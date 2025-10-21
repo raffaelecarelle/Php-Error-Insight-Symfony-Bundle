@@ -23,6 +23,7 @@ final class ErrorInsightService
         private readonly ?string $apiUrl = null,
         private readonly ?string $template = null,
         private readonly ?string $editorUrl = null,
+        private readonly ?string $projectRoot = null,
         private readonly ?string $hostRoot = null,
     ) {
     }
@@ -50,6 +51,7 @@ final class ErrorInsightService
                 'apiUrl' => $this->apiUrl,
                 'template' => $this->template,
                 'editorUrl' => $this->editorUrl,
+                'projectRoot' => $this->projectRoot,
                 'hostProjectRoot' => $this->hostRoot,
             ];
 
