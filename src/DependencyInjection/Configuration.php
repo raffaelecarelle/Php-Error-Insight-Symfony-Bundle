@@ -64,6 +64,10 @@ final class Configuration implements ConfigurationInterface
                     ->defaultNull()
                     ->info('Editor URL template (e.g., phpstorm://open?file=%%file&line=%%line)')
                 ->end()
+                ->scalarNode('host_root')
+                    ->defaultNull()
+                    ->info('Absolute host project root for mapping container paths (e.g., when running in Docker)')
+                ->end()
             ->end();
 
         return $treeBuilder;
