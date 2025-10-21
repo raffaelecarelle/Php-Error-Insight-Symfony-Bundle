@@ -55,6 +55,7 @@ php_error_insight:
     output: 'html'
     verbose: false
     override_symfony_errors: true
+    project_root: '%kernel.project_dir%'  # Absolute path to your project root in the running environment (e.g., /app in Docker)
     # template: '/path/to/custom/template.html.twig'  # Optional custom template
     # api_key: 'your-api-key'  # Required for external APIs
 ```
@@ -72,7 +73,12 @@ PHP_ERROR_INSIGHT_API_URL=http://localhost:11434
 PHP_ERROR_INSIGHT_LANG=en
 PHP_ERROR_INSIGHT_OUTPUT=html
 PHP_ERROR_INSIGHT_VERBOSE=false
+PHP_ERROR_INSIGHT_PROJECT_ROOT=/app
 ```
+
+Note on project_root:
+- Set project_root to the absolute path of your project within the running environment (for example, /app inside a Docker container, or the repository path on your machine).
+- This helps the bundle generate correct file paths for editor links and error rendering. If you also work with containers, you may pair it with host_root to map container paths to your host filesystem.
 
 ## Backend Configuration Examples
 
