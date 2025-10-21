@@ -27,6 +27,7 @@ final class PhpErrorInsightExtension extends Extension
         $container->setParameter('php_error_insight.api_url', $config['api_url']);
         $container->setParameter('php_error_insight.template', $config['template']);
         $container->setParameter('php_error_insight.editor_url', str_replace('%', '%%', $config['editor_url']));
+        $container->setParameter('php_error_insight.project_root', $config['project_root']);
         $container->setParameter('php_error_insight.host_root', $config['host_root']);
 
         // Load service definitions
