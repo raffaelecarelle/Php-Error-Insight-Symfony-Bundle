@@ -7,6 +7,7 @@ namespace PhpErrorInsightBundle\EventListener;
 use PhpErrorInsightBundle\Service\ErrorInsightService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class ExceptionListener
 {
@@ -33,7 +34,11 @@ final class ExceptionListener
                 return;
             }
 
-            $statusCode = $exception->getCode();
+            if ($exception instanceof HttpException) {
+                $statusCode = $exception->getStatusCode();
+            } else {
+                $statusCode = $exception->getCode();
+            }
 
             $response = new Response($content, $statusCode);
             $response->headers->set('Content-Type', 'text/html; charset=utf-8');
