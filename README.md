@@ -23,9 +23,29 @@ Install the bundle (typically in dev/test):
 composer require --dev raffaelecarelle/php-error-insight-symfony-bundle
 ```
 
-With Symfony Flex, the bundle will automatically:
-- Register itself in `config/bundles.php` (usually in `dev` and `test`)
-- Add a default config file in `config/packages/php_error_insight.yaml`
+### Configure Symfony Runtime error handler (required)
+
+To enable the bundle's PHP error handling, you must tell Symfony Runtime to use this bundle's error handler. Add the following to your application's `composer.json` under the `extra.runtime` section, then regenerate the autoloader:
+
+```json
+{
+  "extra": {
+    "runtime": {
+      "error_handler": "PhpErrorInsightBundle\\Handler\\ErrorHandler"
+    }
+  }
+}
+```
+
+After editing composer.json, run:
+
+```bash
+composer dump-autoload
+```
+
+Notes:
+- The configuration must live in your application root `composer.json` (not in a dependency).
+- This requires the `symfony/runtime` Composer plugin to be allowed in your project (see `config.allow-plugins["symfony/runtime"]`).
 
 ## Configuration
 
