@@ -5,22 +5,27 @@ declare(strict_types=1);
 namespace PhpErrorInsightBundle\Handler;
 
 use ErrorExplainer\Config;
+use ErrorExplainer\ErrorExplainer;
 use ErrorExplainer\Internal\ErrorHandler as CustomErrorHandler;
-use Symfony\Component\ErrorHandler\ErrorHandler as SymfonyErrorHandler;
 
-class ErrorHandler extends SymfonyErrorHandler
+class ErrorHandler
 {
     private readonly CustomErrorHandler $customHandler;
 
     public function __construct(?Config $config = null)
     {
-        parent::__construct();
-
-        if (!$config instanceof \ErrorExplainer\Config) {
+        if (!$config instanceof Config) {
             $config = Config::fromEnvAndArray();
         }
 
         $this->customHandler = new CustomErrorHandler($config);
+    }
+
+    public static function register(bool $debug): self
+    {
+        ErrorExplainer::register(['verbose' => $debug]);
+
+        return new self();
     }
 
     public function handleError(int $type, string $message, string $file, int $line): bool
