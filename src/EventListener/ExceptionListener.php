@@ -5,43 +5,56 @@ declare(strict_types=1);
 namespace PhpErrorInsightBundle\EventListener;
 
 use PhpErrorInsightBundle\Service\ErrorInsightService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\EventListener\ErrorListener;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-final class ExceptionListener
+final class ExceptionListener extends ErrorListener
 {
+    /**
+     * @param array<class-string, string>                                                                                   $controller
+     * @param array<class-string, array{log_level: null|string, status_code: null|int<100, 599>, log_channel: null|string}> $exceptionsMapping
+     */
     public function __construct(
         private readonly ErrorInsightService $errorInsightService,
         private readonly bool $enabled,
+        string|object|array|null $controller = null,
+        ?LoggerInterface $logger = null,
+        bool $debug = false,
+        array $exceptionsMapping = [],
     ) {
+        parent::__construct($controller, $logger, $debug, $exceptionsMapping);
     }
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        // Only handle if enabled and configured to override Symfony errors
+        // Enabled flag must be true
         if (!$this->enabled) {
             return;
         }
 
-        $exception = $event->getThrowable();
+        $throwable = $event->getThrowable();
 
         try {
-            $content = $this->errorInsightService->renderException($exception);
+            $content = $this->errorInsightService->renderException($throwable);
 
             if ('' === $content || '0' === $content) {
                 // If we can't render with PHP Error Insight, let Symfony handle it
                 return;
             }
 
-            if ($exception instanceof HttpException) {
-                $statusCode = $exception->getStatusCode();
+            if ($throwable instanceof HttpException) {
+                $statusCode = $throwable->getStatusCode();
+                $response = new Response($content, $statusCode);
+                $response->headers->set('Content-Type', 'text/html; charset=utf-8');
             } else {
-                $statusCode = $exception->getCode();
+                $request = $this->duplicateRequest($throwable, $event->getRequest());
+                $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, false);
+                $response->setContent($content);
             }
-
-            $response = new Response($content, $statusCode);
-            $response->headers->set('Content-Type', 'text/html; charset=utf-8');
 
             $event->setResponse($response);
         } catch (\Throwable) {

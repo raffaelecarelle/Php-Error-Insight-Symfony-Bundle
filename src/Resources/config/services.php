@@ -13,12 +13,10 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
-    // Default auto-configuration for the bundle namespace
     $services->defaults()
         ->autowire()
         ->autoconfigure();
 
-    // Error Insight Service - manages the ErrorExplainer instance
     $services->set(ErrorInsightService::class)
         ->args([
             param('php_error_insight.enabled'),
@@ -36,21 +34,28 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->public();
 
-    // Exception Listener - integrates with Symfony's error handling
     $services->set(ExceptionListener::class)
         ->args([
             service(ErrorInsightService::class),
             param('php_error_insight.enabled'),
+            param('kernel.error_controller'),
+            service('logger')->nullOnInvalid(),
+            param('kernel.debug'),
         ])
         ->tag('kernel.event_listener', [
             'event' => 'kernel.exception',
             'priority' => 255, // High priority to intercept before other listeners
         ]);
 
-    // Register renderer as a service
     $services->set(Renderer::class);
 
-    // Aliases for easier access
     $services->alias('php_error_insight.service', ErrorInsightService::class);
     $services->alias('php_error_insight.exception_listener', ExceptionListener::class);
+
+    $services->set(PhpErrorInsightBundle\EventListener\ErrorListener::class)
+        ->args([
+            service(ErrorInsightService::class),
+            param('php_error_insight.enabled'),
+        ])
+        ->tag('kernel.event_subscriber');
 };

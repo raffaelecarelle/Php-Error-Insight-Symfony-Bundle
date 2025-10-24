@@ -29,6 +29,7 @@ final class PhpErrorInsightExtension extends Extension
         $container->setParameter('php_error_insight.editor_url', $config['editor_url']);
         $container->setParameter('php_error_insight.project_root', $config['project_root']);
         $container->setParameter('php_error_insight.host_root', $config['host_root']);
+        $container->setParameter('php_error_insight.override_symfony_errors', $config['override_symfony_errors']);
 
         // Load service definitions
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

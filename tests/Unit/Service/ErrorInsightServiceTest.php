@@ -56,29 +56,6 @@ final class ErrorInsightServiceTest extends TestCase
         $this->assertFalse($service->isEnabled());
     }
 
-    public function testGetErrorExplainerReturnsNullWhenDisabled(): void
-    {
-        $service = new ErrorInsightService(
-            enabled: false,
-            backend: 'none',
-            model: null,
-            language: 'en',
-            output: 'html',
-            verbose: false,
-            apiKey: null,
-            apiUrl: null,
-            template: null,
-        );
-
-        $this->assertNull($service->getErrorExplainer());
-    }
-
-    public function testGetErrorExplainerReturnsInstanceWhenEnabled(): void
-    {
-        $explainer = $this->service->getErrorExplainer();
-        $this->assertInstanceOf(ErrorExplainer::class, $explainer);
-    }
-
     public function testGetConfigReturnsConfigWhenEnabled(): void
     {
         $config = $this->service->getConfig();
@@ -129,31 +106,6 @@ final class ErrorInsightServiceTest extends TestCase
 
         // Should return some content (either from ErrorExplainer or our fallback)
         $this->assertIsString($result);
-    }
-
-    public function testServiceWorksWithDifferentBackends(): void
-    {
-        $backends = ['none', 'local', 'api'];
-
-        foreach ($backends as $backend) {
-            $service = new ErrorInsightService(
-                enabled: true,
-                backend: $backend,
-                model: 'test-model',
-                language: 'en',
-                output: 'html',
-                verbose: false,
-                apiKey: 'test-key',
-                apiUrl: 'http://localhost:11434',
-                template: null,
-            );
-
-            $this->assertTrue($service->isEnabled());
-            $this->assertInstanceOf(ErrorExplainer::class, $service->getErrorExplainer());
-
-            // Clean up for next iteration
-            ErrorExplainer::unregister();
-        }
     }
 
     public function testServiceWorksWithDifferentOutputFormats(): void

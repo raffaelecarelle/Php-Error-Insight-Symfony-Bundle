@@ -66,11 +66,15 @@ final class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('project_root')
                     ->defaultNull()
-                    ->info('Editor URL template (e.g., phpstorm://open?file=%%file&line=%%line)')
+                    ->info('Absolute project root inside running environment (e.g., /app in Docker)')
                 ->end()
                 ->scalarNode('host_root')
                     ->defaultNull()
                     ->info('Absolute host project root for mapping container paths (e.g., when running in Docker)')
+                ->end()
+                ->booleanNode('override_symfony_errors')
+                    ->defaultFalse()
+                    ->info('Override Symfony error handling (dev environment only)')
                 ->end()
             ->end();
 

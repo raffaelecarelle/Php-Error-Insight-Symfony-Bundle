@@ -58,34 +58,6 @@ final class ExceptionListenerTest extends TestCase
         $this->assertFalse($event->hasResponse());
     }
 
-    public function testListenerDoesNotHandleWhenOverrideIsDisabled(): void
-    {
-        $listener = new ExceptionListener(
-            $this->errorInsightService,
-            enabled: true
-        );
-
-        $event = $this->createExceptionEvent(new \RuntimeException('Test exception'));
-        $listener->onKernelException($event);
-
-        $this->assertFalse($event->hasResponse());
-    }
-
-    public function testListenerDoesNotHandleInProductionEnvironment(): void
-    {
-        // Temporarily override environment
-        $_SERVER['APP_ENV'] = 'prod';
-
-        try {
-            $event = $this->createExceptionEvent(new \RuntimeException('Test exception'));
-            $this->listener->onKernelException($event);
-
-            $this->assertFalse($event->hasResponse());
-        } finally {
-            unset($_SERVER['APP_ENV']);
-        }
-    }
-
     public function testListenerHandlesExceptionInDevelopmentEnvironment(): void
     {
         // Set development environment

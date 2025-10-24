@@ -159,8 +159,8 @@ class YourController
             throw new \RuntimeException('Something went wrong');
         } catch (\Throwable $e) {
             if ($this->errorInsightService->isEnabled()) {
-                $explanation = $this->errorInsightService->handleException($e);
-                // Use the explanation data as needed
+                $html = $this->errorInsightService->renderException($e);
+                // Use or log the rendered HTML as needed
             }
             
             throw $e; // Re-throw to trigger normal error handling
