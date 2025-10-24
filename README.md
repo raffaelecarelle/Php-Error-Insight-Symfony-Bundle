@@ -1,14 +1,13 @@
 # PHP Error Insight Symfony Bundle
 
-A Symfony Bundle that integrates [PHP Error Insight](https://github.com/raffaelecarelle/php-error-insight) to provide AI-powered error handling and debugging for Symfony applications.
+A Symfony bundle that integrates [PHP Error Insight](https://github.com/raffaelecarelle/php-error-insight) to provide AI‑assisted explanations and richer error pages for HTTP and Console errors.
 
 ## Features
 
-- 🔍 **AI-Powered Error Analysis** - Get intelligent explanations and suggestions for errors
-- 🎨 **Beautiful Error Pages** - Modern, responsive error page templates
-- ⚡ **Seamless Integration** - Replaces Symfony's default error pages in development
-- 🛠️ **Console Commands** - Test error handling via CLI
-- 🔧 **Highly Configurable** - Support for multiple AI backends and output formats
+- 🔍 AI‑assisted error explanations (optional, multiple backends)
+- 🎨 Enhanced HTML/text/JSON rendering provided by the core library
+- ⚡ Seamless Symfony integration for HTTP exceptions and Console errors
+- 🔧 Highly configurable: choose backend, model, output, verbosity and paths
 
 ## Requirements
 
@@ -18,32 +17,33 @@ A Symfony Bundle that integrates [PHP Error Insight](https://github.com/raffaele
 
 ## Installation
 
-Install the bundle via Composer:
+Install the bundle (typically in dev/test):
 
 ```bash
 composer require --dev raffaelecarelle/php-error-insight-symfony-bundle
 ```
 
-The bundle is fully compatible with Symfony Flex and will automatically:
-- Register itself in `config/bundles.php` for dev and test environments
-- Create a default configuration file in `config/packages/php_error_insight.yaml`
-- Add environment variable placeholders to your `.env` file
+With Symfony Flex, the bundle will automatically:
+- Register itself in `config/bundles.php` (usually in `dev` and `test`)
+- Add a default config file in `config/packages/php_error_insight.yaml`
 
 ## Configuration
 
-### Basic Configuration
+The bundle exposes a single configuration root: `php_error_insight`.
+
+### Basic configuration
 
 Create or update `config/packages/php_error_insight.yaml`:
 
 ```yaml
 php_error_insight:
     enabled: true
-    backend: 'none'  # or 'local', 'api', 'openai', 'anthropic', 'google'
+    backend: 'none'   # or: local, api, openai, anthropic, google, gemini
     language: 'en'
-    output: 'auto'   # or 'html', 'text', 'json'
+    output: 'auto'    # or: html, text, json
 ```
 
-### Advanced Configuration
+### Advanced configuration
 
 ```yaml
 php_error_insight:
@@ -54,18 +54,36 @@ php_error_insight:
     language: 'en'
     output: 'html'
     verbose: false
-    override_symfony_errors: true
-    project_root: '%kernel.project_dir%'  # Absolute path to your project root in the running environment (e.g., /app in Docker)
-    # template: '/path/to/custom/template.html.twig'  # Optional custom template
-    # api_key: 'your-api-key'  # Required for external APIs
+
+    # Absolute path of your project inside the running environment
+    # (e.g. "/app" inside a Docker container)
+    project_root: '%kernel.project_dir%'
+
+    # Optional: absolute path of the project on the host machine to map
+    # container paths to host paths when rendering links
+    host_root: '/absolute/path/on/host'
+
+    # Optional: custom HTML template supported by the core library
+    template: null
+
+    # Optional: editor URL pattern, e.g. "phpstorm://open?file=%file%&line=%line%"
+    editor_url: null
+
+    # API key for external backends (openai, anthropic, google/gemini, custom api)
+    api_key: null
 ```
 
-### Environment Variables
+Notes:
+- `backend` supports: `none`, `local`, `api`, `openai`, `anthropic`, `google`, `gemini`.
+- When using local backends (e.g. Ollama), set `api_url` to your local endpoint.
+- Use `project_root` and optionally `host_root` to make editor links and paths resolve correctly across containers/hosts.
+- `editor_url` placeholders supported by the core renderer are typically `%file%` and `%line%`.
 
-You can also configure the bundle using environment variables:
+### Environment variables
+
+You can configure via environment variables as well (e.g. in `.env.local`):
 
 ```bash
-# .env or .env.local
 PHP_ERROR_INSIGHT_ENABLED=true
 PHP_ERROR_INSIGHT_BACKEND=local
 PHP_ERROR_INSIGHT_MODEL=llama3:instruct
@@ -74,15 +92,14 @@ PHP_ERROR_INSIGHT_LANG=en
 PHP_ERROR_INSIGHT_OUTPUT=html
 PHP_ERROR_INSIGHT_VERBOSE=false
 PHP_ERROR_INSIGHT_PROJECT_ROOT=/app
+PHP_ERROR_INSIGHT_HOST_ROOT=/Users/you/Projects/acme
+PHP_ERROR_INSIGHT_EDITOR_URL="phpstorm://open?file=%file%&line=%line%"
+PHP_ERROR_INSIGHT_API_KEY=your-key-if-needed
 ```
 
-Note on project_root:
-- Set project_root to the absolute path of your project within the running environment (for example, /app inside a Docker container, or the repository path on your machine).
-- This helps the bundle generate correct file paths for editor links and error rendering. If you also work with containers, you may pair it with host_root to map container paths to your host filesystem.
+## Backend configuration examples
 
-## Backend Configuration Examples
-
-### 1. Local AI (Ollama)
+### 1) Local AI (Ollama)
 
 ```yaml
 php_error_insight:
@@ -91,7 +108,7 @@ php_error_insight:
     api_url: 'http://localhost:11434'
 ```
 
-### 2. OpenAI
+### 2) OpenAI
 
 ```yaml
 php_error_insight:
@@ -100,7 +117,7 @@ php_error_insight:
     api_key: 'sk-your-openai-api-key'
 ```
 
-### 3. Anthropic Claude
+### 3) Anthropic Claude
 
 ```yaml
 php_error_insight:
@@ -109,7 +126,7 @@ php_error_insight:
     api_key: 'your-anthropic-api-key'
 ```
 
-### 4. Google Gemini
+### 4) Google (Generative AI)
 
 ```yaml
 php_error_insight:
@@ -118,142 +135,104 @@ php_error_insight:
     api_key: 'your-google-api-key'
 ```
 
-## Usage
+### 5) Gemini (alias backend)
 
-### Automatic Error Handling
-
-Once configured, the bundle automatically intercepts exceptions in development mode and displays them using PHP Error Insight instead of Symfony's default error pages.
-
-### Testing Error Handling
-
-Use the built-in console command to test error handling:
-
-```bash
-# Test different types of errors
-php bin/console php-error-insight:test --type=exception
-php bin/console php-error-insight:test --type=error
-php bin/console php-error-insight:test --type=warning
-php bin/console php-error-insight:test --type=notice
-
-# Test with custom message
-php bin/console php-error-insight:test --type=exception --message="Custom test error"
+```yaml
+php_error_insight:
+    backend: 'gemini'
+    model: 'gemini-1.5-flash'
+    api_key: 'your-google-api-key'
 ```
 
-### Programmatic Usage
+## Usage
 
-You can also use the service directly in your code:
+### HTTP exceptions
+
+The bundle registers a high‑priority listener for `kernel.exception`. When `enabled` is true, exceptions are rendered using PHP Error Insight’s renderer. If rendering fails or produces empty output, Symfony’s default error handling is used.
+
+### Console errors
+
+A console event subscriber listens to `ConsoleEvents::ERROR` and, when `enabled`, prints the rendered output to the console. If rendering fails or produces empty output, normal console error output is preserved.
+
+### Programmatic usage
+
+You can call the service directly:
 
 ```php
 use PhpErrorInsightBundle\Service\ErrorInsightService;
 
-class YourController
+final class YourController
 {
-    public function __construct(
-        private ErrorInsightService $errorInsightService
-    ) {}
-    
+    public function __construct(private ErrorInsightService $errorInsightService) {}
+
     public function someAction(): Response
     {
         try {
-            // Your code that might throw an exception
-            throw new \RuntimeException('Something went wrong');
+            // ... your code
         } catch (\Throwable $e) {
             if ($this->errorInsightService->isEnabled()) {
                 $html = $this->errorInsightService->renderException($e);
-                // Use or log the rendered HTML as needed
+                // do something with $html (log, email, custom response, ...)
             }
-            
-            throw $e; // Re-throw to trigger normal error handling
+
+            throw $e; // keep default handling flow
         }
     }
 }
 ```
 
-## How It Works
+Service IDs:
+- `PhpErrorInsightBundle\Service\ErrorInsightService` (autowired)
+- Alias: `php_error_insight.service`
 
-1. **Exception Interception**: The bundle registers an event listener that intercepts Symfony's `kernel.exception` event
-2. **AI Analysis**: When enabled, exceptions are analyzed by the configured AI backend
-3. **Enhanced Display**: Error pages are rendered with AI-powered explanations and suggestions
-4. **Fallback Handling**: If AI analysis fails, the bundle gracefully falls back to Symfony's default behavior
+## How it works
 
-## Development Mode Only
+1. Exception interception (HTTP) via `kernel.exception` listener
+2. Error interception (Console) via `ConsoleEvents::ERROR` subscriber
+3. The bundle builds a Config and delegates rendering to the core library
+4. Graceful fallback to Symfony’s default error handling when needed
 
-For security reasons, the bundle only processes exceptions in development environments (`APP_ENV=dev`).
+## Environment considerations
+
+It’s recommended to enable the bundle only in `dev` and/or `test`. You control this through:
+- `config/bundles.php` (register the bundle for specific environments)
+- `php_error_insight.enabled` setting per environment config
 
 ## Customization
 
-### Custom Templates
-
-You can provide your own Twig template for error rendering:
-
-```yaml
-php_error_insight:
-    template: 'errors/custom_error.html.twig'
-```
-
-Your custom template should expect the following variables:
-- `exception_class`: The exception class name
-- `message`: The error message
-- `file`: The file where the error occurred
-- `line`: The line number where the error occurred
-- `trace`: The stack trace
-- `ai_explanation`: AI-generated explanation (if available)
-- `ai_suggestions`: AI-generated suggestions (if available)
-
-### Service Customization
-
-You can extend or decorate the bundle's services:
-
-```yaml
-services:
-    App\Service\CustomErrorInsightService:
-        decorates: PhpErrorInsightBundle\Service\ErrorInsightService
-        arguments: ['@App\Service\CustomErrorInsightService.inner']
-```
+- `template`: path to a custom HTML template supported by the core renderer
+- `editor_url`: URL pattern to open files in your editor (e.g. PhpStorm)
+- `project_root` / `host_root`: map paths correctly between container and host
 
 ## Troubleshooting
 
-### Bundle Not Working
-
-1. Ensure you're in development mode (`APP_ENV=dev`)
-3. Verify the bundle is registered in `config/bundles.php`
-
-### AI Backend Issues
-
-1. For local backends (Ollama), ensure the service is running and accessible
-2. For API backends, verify your API key is correct and you have sufficient credits
-3. Check the logs for any connection or authentication errors
-
-### Performance Considerations
-
-- AI analysis adds latency to error pages
-- Consider using local AI models for faster response times
+- Ensure the bundle is registered for the environment you’re using
+- Verify `php_error_insight.enabled` is true for that environment
+- For local backends, ensure your local service (e.g. Ollama) is running
+- For API backends, verify `api_key` and reachability of `api_url` if applicable
+- Check your logs for errors from the renderer or backend
 
 ## Development
 
-### Running Tests
+Run tests:
 
 ```bash
 composer install
 composer test
 ```
 
-### Code Quality
+Quality tools:
 
 ```bash
-composer quality  # Run all quality checks
-composer fix-all  # Apply automatic fixes
+composer quality
+composer fix-all
 ```
-
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
 This bundle is licensed under the GPL-3.0-or-later license. See [LICENSE](LICENSE) for details.
 
-## Related Projects
+## Related
 
-- [PHP Error Insight](https://github.com/raffaelecarelle/php-error-insight) - The core library
-- [Symfony](https://symfony.com) - The PHP framework this bundle integrates with
+- [PHP Error Insight](https://github.com/raffaelecarelle/php-error-insight)
+- [Symfony](https://symfony.com)

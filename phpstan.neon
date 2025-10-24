@@ -6,3 +6,5 @@ parameters:
     paths:
         - src
         - tests
+    ignoreErrors:
+        - '#Class PhpErrorInsightBundle\\Handler\\ErrorHandler extends @final class Symfony\\Component\\ErrorHandler\\ErrorHandler#'

@@ -13,6 +13,8 @@ final class PhpErrorInsightExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $container->setParameter('debug.error_handler.throw_at', 0);
+
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
@@ -29,7 +31,6 @@ final class PhpErrorInsightExtension extends Extension
         $container->setParameter('php_error_insight.editor_url', $config['editor_url']);
         $container->setParameter('php_error_insight.project_root', $config['project_root']);
         $container->setParameter('php_error_insight.host_root', $config['host_root']);
-        $container->setParameter('php_error_insight.override_symfony_errors', $config['override_symfony_errors']);
 
         // Load service definitions
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

@@ -31,7 +31,6 @@ final class ExceptionListener extends ErrorListener
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        // Enabled flag must be true
         if (!$this->enabled) {
             return;
         }
@@ -57,6 +56,8 @@ final class ExceptionListener extends ErrorListener
             }
 
             $event->setResponse($response);
+
+            $event->stopPropagation();
         } catch (\Throwable) {
             // If there's an error in rendering, don't interfere with Symfony's error handling
             // Log the error if possible but don't break the application
