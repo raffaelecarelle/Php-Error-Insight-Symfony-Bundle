@@ -113,7 +113,7 @@ PHP_ERROR_INSIGHT_OUTPUT=html
 PHP_ERROR_INSIGHT_VERBOSE=false
 PHP_ERROR_INSIGHT_PROJECT_ROOT=/app
 PHP_ERROR_INSIGHT_HOST_ROOT=/Users/you/Projects/acme
-PHP_ERROR_INSIGHT_EDITOR_URL="phpstorm://open?file=%file%&line=%line%"
+PHP_ERROR_INSIGHT_EDITOR="phpstorm://open?file=%file%&line=%line%"
 PHP_ERROR_INSIGHT_API_KEY=your-key-if-needed
 ```
 
