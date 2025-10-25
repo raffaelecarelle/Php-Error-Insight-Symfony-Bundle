@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpErrorInsightBundle\Tests\Unit\Service;
 
-use ErrorExplainer\Config;
-use ErrorExplainer\ErrorExplainer;
+use PhpErrorInsight\Config;
+use PhpErrorInsight\ErrorExplainer;
 use PhpErrorInsightBundle\Service\ErrorInsightService;
 use PHPUnit\Framework\TestCase;
 

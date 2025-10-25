@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpErrorInsightBundle\DependencyInjection;
 
-use ErrorExplainer\Config;
+use PhpErrorInsight\Config;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

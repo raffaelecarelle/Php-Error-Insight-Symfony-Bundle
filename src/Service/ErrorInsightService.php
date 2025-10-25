@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpErrorInsightBundle\Service;
 
-use ErrorExplainer\Config;
-use ErrorExplainer\Internal\ErrorHandler;
+use PhpErrorInsight\Config;
+use PhpErrorInsight\Internal\ErrorHandler;
 
 final class ErrorInsightService
 {

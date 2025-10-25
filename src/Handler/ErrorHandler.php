@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpErrorInsightBundle\Handler;
 
-use ErrorExplainer\Config;
-use ErrorExplainer\ErrorExplainer;
-use ErrorExplainer\Internal\ErrorHandler as CustomErrorHandler;
+use PhpErrorInsight\Config;
+use PhpErrorInsight\ErrorExplainer;
+use PhpErrorInsight\Internal\ErrorHandler as CustomErrorHandler;
 
 class ErrorHandler
 {

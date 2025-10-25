@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use ErrorExplainer\Internal\Renderer;
+use PhpErrorInsight\Internal\Renderer;
 use PhpErrorInsightBundle\EventListener\ExceptionListener;
 use PhpErrorInsightBundle\Service\ErrorInsightService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
