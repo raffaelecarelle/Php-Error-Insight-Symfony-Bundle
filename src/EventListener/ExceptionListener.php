@@ -48,7 +48,6 @@ final class ExceptionListener extends ErrorListener
             if ($throwable instanceof HttpException) {
                 $statusCode = $throwable->getStatusCode();
                 $response = new Response($content, $statusCode);
-                $response->headers->set('Content-Type', 'text/html; charset=utf-8');
             } else {
                 $request = $this->duplicateRequest($throwable, $event->getRequest());
                 $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, false);
@@ -56,8 +55,6 @@ final class ExceptionListener extends ErrorListener
             }
 
             $event->setResponse($response);
-
-            $event->stopPropagation();
         } catch (\Throwable) {
             // If there's an error in rendering, don't interfere with Symfony's error handling
             // Log the error if possible but don't break the application
