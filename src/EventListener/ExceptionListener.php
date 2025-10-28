@@ -38,7 +38,8 @@ final class ExceptionListener extends ErrorListener
         $throwable = $event->getThrowable();
 
         try {
-            $content = $this->errorInsightService->renderException($throwable);
+            // Use Symfony's debug flag to drive verbosity at runtime
+            $content = $this->errorInsightService->renderException($throwable, $this->debug);
 
             if ('' === $content || '0' === $content) {
                 // If we can't render with PHP Error Insight, let Symfony handle it

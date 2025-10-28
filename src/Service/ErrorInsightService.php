@@ -30,7 +30,10 @@ final class ErrorInsightService
         return $this->enabled;
     }
 
-    public function getConfig(): ?Config
+    /**
+     * Build the effective config, optionally overriding verbosity at runtime.
+     */
+    public function getConfig(?bool $verboseOverride = null): ?Config
     {
         if (!$this->enabled) {
             return null;
@@ -42,7 +45,7 @@ final class ErrorInsightService
             'model' => $this->model,
             'language' => $this->language,
             'output' => $this->output,
-            'verbose' => $this->verbose,
+            'verbose' => $verboseOverride ?? $this->verbose,
             'apiKey' => $this->apiKey,
             'apiUrl' => $this->apiUrl,
             'template' => $this->template,
@@ -52,7 +55,14 @@ final class ErrorInsightService
         ]);
     }
 
-    public function renderException(\Throwable $exception): string
+    /**
+     * Render the exception according to the effective configuration.
+     *
+     * When $verboseOverride is provided, it controls whether to include extra
+     * details like stack traces. This allows wiring Symfony's debug/verbosity
+     * flags to the core library at runtime.
+     */
+    public function renderException(\Throwable $exception, ?bool $verboseOverride = null): string
     {
         if (!$this->enabled) {
             return '';
@@ -61,7 +71,7 @@ final class ErrorInsightService
         ob_start();
 
         try {
-            $config = $this->getConfig();
+            $config = $this->getConfig($verboseOverride);
             if (!$config instanceof Config) {
                 return '';
             }
@@ -69,6 +79,7 @@ final class ErrorInsightService
             $handler = new ErrorHandler($config);
             $handler->handleException($exception);
         } catch (\Throwable) {
+            // Swallow to avoid interfering with host error handling; let Symfony continue.
         } finally {
             $output = ob_get_clean();
         }
