@@ -110,6 +110,7 @@ final class ExceptionListener extends ErrorListener
 
         // 3) Best-effort request attributes set by Security flows
         $request = $event->getRequest();
+
         return $request->attributes->has(SecurityRequestAttributes::AUTHENTICATION_ERROR)
             || $request->attributes->has(SecurityRequestAttributes::ACCESS_DENIED_ERROR);
     }
