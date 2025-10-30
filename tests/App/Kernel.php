@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace PhpErrorInsightBundle\Tests\App;
 
 use PhpErrorInsightBundle\PhpErrorInsightBundle;
+use PhpErrorInsightBundle\Tests\App\Controller\SiteController;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
-use PhpErrorInsightBundle\Tests\App\Controller\SiteController;
 
 final class Kernel extends BaseKernel
 {
@@ -53,7 +53,7 @@ final class Kernel extends BaseKernel
         if (class_exists(SecurityBundle::class)) {
             $container->extension('security', [
                 'password_hashers' => [
-                    'Symfony\\Component\\Security\\Core\\User\\PasswordAuthenticatedUserInterface' => 'plaintext',
+                    \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface::class => 'plaintext',
                 ],
                 'providers' => [
                     'in_memory' => [
