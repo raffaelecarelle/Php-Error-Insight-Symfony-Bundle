@@ -137,6 +137,7 @@ final class ExceptionListenerTest extends TestCase
 
         // Depending on renderer, content should be non-empty string
         self::assertTrue($event->hasResponse());
+        self::assertNotNull($event->getResponse());
         $response = $event->getResponse();
         self::assertSame(200, $response->getStatusCode());
         self::assertIsString($response->getContent());

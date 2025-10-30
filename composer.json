@@ -34,7 +34,9 @@
         "symfony/css-selector": "^5.4|^6.4|^7.0",
         "symfony/dom-crawler": "^5.4|^6.4|^7.0",
         "symfony/security-bundle": "^5.4|^6.4|^7.0",
-        "ergebnis/phpunit-slow-test-detector": "^2.20"
+        "ergebnis/phpunit-slow-test-detector": "^2.20",
+        "phpstan/phpstan-phpunit": "^1.4",
+        "phpstan/extension-installer": "^1.4"
     },
     "autoload": {
         "psr-4": {
@@ -67,7 +69,8 @@
     },
     "config": {
         "allow-plugins": {
-            "symfony/runtime": false
+            "symfony/runtime": false,
+            "phpstan/extension-installer": true
         }
     }
 }
