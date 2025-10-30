@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\LazyResponseException;
 use Symfony\Component\Security\Core\Exception\LogoutException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Firewall\ExceptionListener as SymfonyExceptionListener;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
@@ -103,7 +104,16 @@ final class ExceptionListener extends ErrorListener
         // 2) Best-effort request attributes set by Security flows
         $request = $event->getRequest();
 
-        return $request->attributes->has(SecurityRequestAttributes::AUTHENTICATION_ERROR)
-            || $request->attributes->has(SecurityRequestAttributes::ACCESS_DENIED_ERROR);
+        if (class_exists(SecurityRequestAttributes::class)) {
+            return $request->attributes->has(SecurityRequestAttributes::AUTHENTICATION_ERROR)
+                || $request->attributes->has(SecurityRequestAttributes::ACCESS_DENIED_ERROR);
+        }
+
+        if (class_exists(Security::class)) {
+            return $request->attributes->has(Security::AUTHENTICATION_ERROR)
+                || $request->attributes->has(Security::ACCESS_DENIED_ERROR);
+        }
+
+        return false;
     }
 }
