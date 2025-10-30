@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\LazyResponseException;
 use Symfony\Component\Security\Core\Exception\LogoutException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
 final class ExceptionListenerTest extends TestCase
@@ -108,8 +109,16 @@ final class ExceptionListenerTest extends TestCase
         $listener = new ExceptionListener($this->createEnabledService(), enabled: true);
         $kernel = $this->createMock(KernelInterface::class);
         $request = Request::create('/');
-        $request->attributes->set(SecurityRequestAttributes::AUTHENTICATION_ERROR, 'x');
-        $request->attributes->set(SecurityRequestAttributes::ACCESS_DENIED_ERROR, 'y');
+
+        if (class_exists(SecurityRequestAttributes::class)) {
+            $request->attributes->set(SecurityRequestAttributes::AUTHENTICATION_ERROR, 'x');
+            $request->attributes->set(SecurityRequestAttributes::ACCESS_DENIED_ERROR, 'y');
+        }
+
+        if (class_exists(Security::class)) {
+            $request->attributes->set(Security::AUTHENTICATION_ERROR, 'x');
+            $request->attributes->set(Security::ACCESS_DENIED_ERROR, 'y');
+        }
 
         $event = new ExceptionEvent(
             $kernel,

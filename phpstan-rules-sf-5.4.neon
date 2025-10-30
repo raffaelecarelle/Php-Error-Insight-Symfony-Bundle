@@ -1,4 +1,0 @@
-parameters:
-    ignoreErrors:
-        - '#Access to constant AUTHENTICATION_ERROR on an unknown class#'
-        - '#Access to constant ACCESS_DENIED_ERROR on an unknown class#'

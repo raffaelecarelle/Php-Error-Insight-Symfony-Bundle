@@ -1,6 +1,3 @@
-includes:
-    - phpstan.conditional.php
-
 parameters:
     level: 8
     paths:
