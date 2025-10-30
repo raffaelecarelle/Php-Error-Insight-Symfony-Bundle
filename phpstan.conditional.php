@@ -12,7 +12,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $includes = [];
 
-if (str_starts_with(\Composer\InstalledVersions::getVersion('symfony/framework-bundle'), 'v7.')) {
+if (str_starts_with(\Composer\InstalledVersions::getVersion('symfony/framework-bundle'), 'v5.4')) {
     $includes[] = __DIR__ . '/phpstan-rules-sf-5.4.neon';
 }
 
