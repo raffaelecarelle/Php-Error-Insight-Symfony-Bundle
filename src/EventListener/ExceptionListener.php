@@ -10,7 +10,7 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\EventListener\ErrorListener;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -63,7 +63,7 @@ final class ExceptionListener extends ErrorListener
                 return;
             }
 
-            if ($throwable instanceof HttpException) {
+            if ($throwable instanceof HttpExceptionInterface) {
                 $statusCode = $throwable->getStatusCode();
                 $response = new Response($content, $statusCode);
             } else {
@@ -100,15 +100,7 @@ final class ExceptionListener extends ErrorListener
             }
         }
 
-        // 2) Standard 401/403 HttpException should be handled by Security (entry points/denied handlers)
-        if ($throwable instanceof HttpException) {
-            $status = $throwable->getStatusCode();
-            if (401 === $status || 403 === $status) {
-                return true;
-            }
-        }
-
-        // 3) Best-effort request attributes set by Security flows
+        // 2) Best-effort request attributes set by Security flows
         $request = $event->getRequest();
 
         return $request->attributes->has(SecurityRequestAttributes::AUTHENTICATION_ERROR)
