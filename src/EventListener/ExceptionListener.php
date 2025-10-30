@@ -6,11 +6,18 @@ namespace PhpErrorInsightBundle\EventListener;
 
 use PhpErrorInsightBundle\Service\ErrorInsightService;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\EventListener\ErrorListener;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\LazyResponseException;
+use Symfony\Component\Security\Core\Exception\LogoutException;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
+use Symfony\Component\Security\Http\Firewall\ExceptionListener as SymfonyExceptionListener;
 
 final class ExceptionListener extends ErrorListener
 {
@@ -32,6 +39,16 @@ final class ExceptionListener extends ErrorListener
     public function onKernelException(ExceptionEvent $event): void
     {
         if (!$this->enabled) {
+            return;
+        }
+
+        // Only handle main requests; let Symfony handle sub-requests and special flows
+        if (!$event->isMainRequest()) {
+            return;
+        }
+
+        // Defer to Symfony Security when it is responsible for handling the exception
+        if ($this->shouldDeferToSecurity($event)) {
             return;
         }
 
@@ -60,5 +77,44 @@ final class ExceptionListener extends ErrorListener
             // If there's an error in rendering, don't interfere with Symfony's error handling
             // Log the error if possible but don't break the application
         }
+    }
+
+    private function shouldDeferToSecurity(ExceptionEvent $event): bool
+    {
+        $throwable = $event->getThrowable();
+
+        if(
+            !class_exists(SecurityBundle::class) ||
+            !class_exists(SymfonyExceptionListener::class)
+        ) {
+            return false;
+        }
+
+        // 1) Exception chain includes Security-related exceptions
+        for ($e = $throwable; null !== $e; $e = $e->getPrevious()) {
+            if ($e instanceof AuthenticationException
+                || $e instanceof AccessDeniedException
+                || $e instanceof LogoutException
+                || $e instanceof LazyResponseException) {
+                return true;
+            }
+        }
+
+        // 2) Standard 401/403 HttpException should be handled by Security (entry points/denied handlers)
+        if ($throwable instanceof HttpException) {
+            $status = $throwable->getStatusCode();
+            if (401 === $status || 403 === $status) {
+                return true;
+            }
+        }
+
+        // 3) Best-effort request attributes set by Security flows
+        $request = $event->getRequest();
+        if ($request->attributes->has(SecurityRequestAttributes::AUTHENTICATION_ERROR)
+            || $request->attributes->has(SecurityRequestAttributes::ACCESS_DENIED_ERROR)) {
+            return true;
+        }
+
+        return false;
     }
 }

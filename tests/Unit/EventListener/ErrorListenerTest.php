@@ -45,7 +45,7 @@ final class ErrorListenerTest extends TestCase
             backend: 'none',
             model: null,
             language: 'en',
-            output: 'html',
+            output: 'text',
             verbose: false,
             apiKey: null,
             apiUrl: null,

@@ -32,7 +32,9 @@
         "symfony/phpunit-bridge": "^5.4|^6.4|^7.0",
         "symfony/browser-kit": "^5.4|^6.4|^7.0",
         "symfony/css-selector": "^5.4|^6.4|^7.0",
-        "symfony/dom-crawler": "^5.4|^6.4|^7.0"
+        "symfony/dom-crawler": "^5.4|^6.4|^7.0",
+        "symfony/security-bundle": "^5.4|^6.4|^7.0",
+        "ergebnis/phpunit-slow-test-detector": "^2.20"
     },
     "autoload": {
         "psr-4": {
