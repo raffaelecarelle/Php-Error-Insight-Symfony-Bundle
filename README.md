@@ -12,7 +12,7 @@ A Symfony bundle that integrates [PHP Error Insight](https://github.com/raffaele
 ## Requirements
 
 - PHP >= 8.1
-- Symfony >= 6.4
+- Symfony >= 5.4
 - Composer
 
 ## Installation
