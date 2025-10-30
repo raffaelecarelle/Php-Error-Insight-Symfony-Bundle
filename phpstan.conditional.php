@@ -11,8 +11,9 @@ require_once __DIR__ . '/vendor/autoload.php';
  */
 
 $includes = [];
+$sfVer = \Composer\InstalledVersions::getVersion('symfony/framework-bundle');
 
-if (str_starts_with(\Composer\InstalledVersions::getVersion('symfony/framework-bundle'), 'v5.4')) {
+if (str_starts_with($sfVer, '5.4') || str_starts_with($sfVer, 'v5.4')) {
     $includes[] = __DIR__ . '/phpstan-rules-sf-5.4.neon';
 }
 
