@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace PhpErrorInsightBundle\Tests\Unit\EventListener;
 
-use PhpErrorInsightBundle\EventListener\ErrorListener;
+use PhpErrorInsightBundle\EventListener\ConsoleErrorListener;
 use PhpErrorInsightBundle\Service\ErrorInsightService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-final class ErrorListenerTest extends TestCase
+final class ConsoleErrorListenerTest extends TestCase
 {
     public function testDoesNothingWhenDisabled(): void
     {
@@ -27,7 +27,7 @@ final class ErrorListenerTest extends TestCase
             template: null,
         );
 
-        $listener = new ErrorListener($service, enabled: false);
+        $listener = new ConsoleErrorListener($service, enabled: false);
 
         $input = new ArrayInput([]);
         $output = new BufferedOutput();
@@ -52,7 +52,7 @@ final class ErrorListenerTest extends TestCase
             template: null,
         );
 
-        $listener = new ErrorListener($service, enabled: true);
+        $listener = new ConsoleErrorListener($service, enabled: true);
 
         $input = new ArrayInput([]);
         $output = new BufferedOutput();

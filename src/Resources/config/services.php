@@ -52,7 +52,7 @@ return static function (ContainerConfigurator $container): void {
     $services->alias('php_error_insight.service', ErrorInsightService::class);
     $services->alias('php_error_insight.exception_listener', ExceptionListener::class);
 
-    $services->set(PhpErrorInsightBundle\EventListener\ErrorListener::class)
+    $services->set(PhpErrorInsightBundle\EventListener\ConsoleErrorListener::class)
         ->args([
             service(ErrorInsightService::class),
             param('php_error_insight.enabled'),
