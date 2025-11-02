@@ -63,6 +63,7 @@ class ConsoleErrorListener implements EventSubscriberInterface
         // Then in the terminate event I set the error code back to 1 because Symfony has already set the exception to null here (having found the error code set to 0 above)
         // and therefore Symfony will not print anything
         $event->setExitCode(1);
+        $this->isError = false;
     }
 
     public static function getSubscribedEvents(): array
