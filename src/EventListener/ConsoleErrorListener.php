@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpErrorInsightBundle\EventListener;
 
 use PhpErrorInsightBundle\Service\ErrorInsightService;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
@@ -47,7 +48,7 @@ class ConsoleErrorListener implements EventSubscriberInterface
             // Because after the error event and terminate event are completed, if the error code is != 0
             // Symfony re-throws the exception and renders Symfony's error output. This is not desired
             /* @see Application::run() line 156 */
-            $event->setExitCode(0);
+            $event->setExitCode(Command::SUCCESS);
             $this->isError = true;
         } catch (\Throwable) {
             // Never break CLI flow due to renderer issues
@@ -62,7 +63,7 @@ class ConsoleErrorListener implements EventSubscriberInterface
 
         // Then in the terminate event I set the error code back to 1 because Symfony has already set the exception to null here (having found the error code set to 0 above)
         // and therefore Symfony will not print anything
-        $event->setExitCode(1);
+        $event->setExitCode(Command::FAILURE);
     }
 
     public static function getSubscribedEvents(): array
