@@ -2,6 +2,12 @@
 
 A Symfony bundle that integrates [PHP Error Insight](https://github.com/raffaelecarelle/php-error-insight) to provide AI‑assisted explanations and richer error pages for HTTP and Console errors.
 
+Screenshots:
+
+![screenview1.png](resources/img/readme/screenview1.png)
+![screenview2.png](resources/img/readme/screenview2.png)
+![terminal.png](resources/img/readme/terminal.png)
+
 ## Features
 
 - 🔍 AI‑assisted error explanations (optional, multiple backends)
