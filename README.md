@@ -4,9 +4,9 @@ A Symfony bundle that integrates [PHP Error Insight](https://github.com/raffaele
 
 Screenshots:
 
-![screenview1.png](resources/img/readme/screenview1.png)
-![screenview2.png](resources/img/readme/screenview2.png)
-![terminal.png](resources/img/readme/terminal.png)
+![screenview1.png](src/Resources/img/readme/screenview1.png)
+![screenview2.png](src/Resources/img/readme/screenview2.png)
+![terminal.png](src/Resources/img/readme/terminal.png)
 
 ## Features
 
