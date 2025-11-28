@@ -7,21 +7,21 @@ namespace PhpErrorInsightBundle\Service;
 use PhpErrorInsight\Config;
 use PhpErrorInsight\Internal\ErrorHandler;
 
-final class ErrorInsightService
+final readonly class ErrorInsightService
 {
     public function __construct(
-        private readonly bool $enabled,
-        private readonly string $backend,
-        private readonly ?string $model,
-        private readonly string $language,
-        private readonly string $output,
-        private readonly bool $verbose,
-        private readonly ?string $apiKey = null,
-        private readonly ?string $apiUrl = null,
-        private readonly ?string $template = null,
-        private readonly ?string $editorUrl = null,
-        private readonly ?string $projectRoot = null,
-        private readonly ?string $hostRoot = null,
+        private bool $enabled,
+        private string $backend,
+        private ?string $model,
+        private string $language,
+        private string $output,
+        private bool $verbose,
+        private ?string $apiKey = null,
+        private ?string $apiUrl = null,
+        private ?string $template = null,
+        private ?string $editorUrl = null,
+        private ?string $projectRoot = null,
+        private ?string $hostRoot = null,
     ) {
     }
 
