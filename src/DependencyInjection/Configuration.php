@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpErrorInsightBundle\DependencyInjection;
 
 use PhpErrorInsight\Config;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
