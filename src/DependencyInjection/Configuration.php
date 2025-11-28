@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace PhpErrorInsightBundle\DependencyInjection;
 
 use PhpErrorInsight\Config;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
+    /**
+     * @return TreeBuilder<ArrayNodeDefinition>
+     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('php_error_insight');
